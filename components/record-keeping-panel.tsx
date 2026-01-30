@@ -15,23 +15,25 @@ export default function RecordKeepingPanel() {
         </div>
       </div>
 
-      <div className="mt-5 grid gap-4 sm:mt-6 sm:grid-cols-2">
+      <div className="mt-5 space-y-4 sm:mt-6">
         <button
           type="button"
-          className="group flex flex-col items-center gap-2 rounded-2xl border border-rose-100 bg-white px-4 py-5 text-center shadow-sm transition hover:border-rose-200 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-200"
+          className="group flex w-full flex-col items-center gap-3 rounded-2xl bg-primary px-5 py-6 text-center text-primary-foreground shadow-md transition hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
         >
-          <span className="flex h-10 w-10 items-center justify-center rounded-full bg-rose-50 text-rose-500">
+          <span className="flex h-11 w-11 items-center justify-center rounded-full bg-white/15 text-primary-foreground">
             <Mic className="h-5 w-5" />
           </span>
-          <span className="text-base font-semibold text-foreground">記帳開口說</span>
-          <span className="text-sm text-muted-foreground">
+          <span className="text-base font-semibold text-primary-foreground">記帳開口說</span>
+          <span className="text-sm text-primary-foreground/80">
             用說的就能記帳，自動辨識時間、內容與金額
           </span>
         </button>
+      </div>
 
+      <div className="mt-4 sm:mt-5">
         <button
           type="button"
-          className="group flex flex-col items-center gap-2 rounded-2xl border border-rose-100 bg-white px-4 py-5 text-center shadow-sm transition hover:border-rose-200 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-200"
+          className="group flex w-full flex-col items-center gap-2 rounded-2xl border border-rose-100 bg-white px-4 py-4 text-center shadow-sm transition hover:border-rose-200 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-200"
         >
           <span className="flex h-10 w-10 items-center justify-center rounded-full bg-rose-50 text-rose-500">
             <Upload className="h-5 w-5" />
@@ -41,10 +43,6 @@ export default function RecordKeepingPanel() {
             上傳記帳訊息，自動分類整理成表格並分析
           </span>
         </button>
-      </div>
-
-      <div className="mt-4 rounded-2xl border border-rose-100 bg-white/80 px-4 py-3 text-center text-sm text-muted-foreground sm:mt-5">
-        選擇上方任一方式開始記帳，系統會自動幫您分類整理並提供財務分析
       </div>
     </section>
   )
