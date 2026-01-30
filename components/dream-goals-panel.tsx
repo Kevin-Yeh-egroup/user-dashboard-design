@@ -53,21 +53,23 @@ export default function DreamGoalsPanel() {
 
   return (
     <Card className="bg-white border-primary/20 shadow-lg hover:shadow-xl transition-shadow">
-      <CardHeader className="pb-4 border-b border-primary/10 flex flex-row items-center justify-between">
+      <CardHeader className="pb-4 border-b border-primary/10 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-2">
           <Heart className="w-6 h-6 text-primary" fill="currentColor" />
-          <CardTitle className="text-xl font-bold text-foreground">夢想完成狀況</CardTitle>
+          <CardTitle className="text-lg sm:text-xl font-bold text-foreground">
+            夢想完成狀況
+          </CardTitle>
         </div>
         <Button
           size="sm"
-          className="gap-1 bg-primary hover:bg-primary/90 text-primary-foreground"
+          className="w-full sm:w-auto justify-center gap-1 bg-primary hover:bg-primary/90 text-primary-foreground"
         >
           <Plus className="w-4 h-4" />
           新增夢想
         </Button>
       </CardHeader>
 
-      <CardContent className="pt-6 space-y-4">
+      <CardContent className="pt-4 sm:pt-6 space-y-3 sm:space-y-4">
         {dreams.map((dream) => {
           const percentage = calculatePercentage(dream.completed, dream.target)
           const remaining = dream.target - dream.completed
@@ -75,9 +77,9 @@ export default function DreamGoalsPanel() {
           return (
             <div
               key={dream.id}
-              className="p-4 rounded-lg bg-primary/5 border border-primary/15 hover:border-primary/30 transition-colors"
+              className="p-4 sm:p-5 rounded-lg bg-primary/5 border border-primary/15 hover:border-primary/30 transition-colors"
             >
-              <div className="flex items-start justify-between mb-3">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between mb-3">
                 <div className="flex items-start gap-3 flex-1">
                   <span className="text-2xl">{DREAM_ICONS[dream.icon]}</span>
                   <div className="flex-1">
@@ -89,7 +91,7 @@ export default function DreamGoalsPanel() {
                     </p>
                   </div>
                 </div>
-                <div className="text-right">
+                <div className="flex items-center justify-between sm:flex-col sm:items-end gap-2">
                   <div className="text-primary font-semibold text-lg">{percentage}%</div>
                   <Button
                     variant="ghost"
@@ -110,7 +112,7 @@ export default function DreamGoalsPanel() {
                 </div>
               </div>
 
-              <div className="flex justify-between items-center text-sm">
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between text-sm">
                 <span className="text-muted-foreground">
                   已完成：
                   <span className="font-semibold text-primary ml-1">
@@ -125,7 +127,7 @@ export default function DreamGoalsPanel() {
                 </span>
               </div>
 
-              <div className="mt-2 text-xs text-muted-foreground bg-secondary/30 rounded px-2 py-1.5">
+              <div className="mt-2 text-[11px] sm:text-xs text-muted-foreground bg-secondary/30 rounded px-2 py-1.5 leading-relaxed">
                 ✨ 已完成金額 - 初始設定金額 - 記帳中的儲備金額
               </div>
             </div>
