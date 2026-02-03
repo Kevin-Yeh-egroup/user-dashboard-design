@@ -8,7 +8,7 @@ export default function RecordKeepingPanel() {
           <FileText className="h-5 w-5" />
         </span>
         <div className="space-y-1">
-          <h2 className="text-lg font-semibold text-foreground sm:text-xl">落實記帳</h2>
+          <h2 className="text-lg font-semibold text-foreground sm:text-xl">記帳專區</h2>
           <p className="text-sm leading-relaxed text-muted-foreground sm:text-base">
             透過語音輸入或上傳帳務資訊，我們會自動幫您分類整理並分析現金流
           </p>
