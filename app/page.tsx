@@ -5,8 +5,24 @@ import DreamGoalsPanel, { type Dream } from '@/components/dream-goals-panel'
 import EmergencyFundPanel from '@/components/emergency-fund-panel'
 import FinancialIndicatorsPanel from '@/components/financial-indicators-panel'
 import IndicatorHistoryPanel from '@/components/indicator-history-panel'
+import OverviewActionSections from '@/components/overview-action-sections'
 import RecordKeepingPanel from '@/components/record-keeping-panel'
+import RecordKeepingTracker from '@/components/record-keeping-tracker'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { type RecordEntry } from '@/lib/record-keeping'
+
+const toDateKey = (date: Date) => {
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
+
+const addDays = (date: Date, offset: number) => {
+  const next = new Date(date)
+  next.setDate(date.getDate() + offset)
+  return next
+}
 
 export default function Dashboard() {
   const [dreams, setDreams] = useState<Dream[]>([
@@ -29,6 +45,55 @@ export default function Dashboard() {
     target: 300000,
     current: 100000,
   })
+  const [recordEntries, setRecordEntries] = useState<RecordEntry[]>(() => {
+    const today = new Date()
+    const todayKey = toDateKey(today)
+    const yesterdayKey = toDateKey(addDays(today, -1))
+    const twoDaysAgoKey = toDateKey(addDays(today, -2))
+
+    return [
+      {
+        id: 'record-1',
+        date: todayKey,
+        title: '早餐',
+        category: '生活支出 / 生活變動支出',
+        amount: 85,
+        type: 'expense',
+      },
+      {
+        id: 'record-2',
+        date: todayKey,
+        title: '交通卡加值',
+        category: '生活支出 / 生活變動支出',
+        amount: 200,
+        type: 'expense',
+      },
+      {
+        id: 'record-3',
+        date: todayKey,
+        title: '兼職收入',
+        category: '月收入 / 生活收入 / 變動收入',
+        amount: 1200,
+        type: 'income',
+      },
+      {
+        id: 'record-4',
+        date: yesterdayKey,
+        title: '晚餐',
+        category: '生活支出 / 生活變動支出',
+        amount: 260,
+        type: 'expense',
+      },
+      {
+        id: 'record-5',
+        date: twoDaysAgoKey,
+        title: '書籍',
+        category: '生活支出 / 生活變動支出',
+        amount: 520,
+        type: 'expense',
+      },
+    ]
+  })
   const dreamSummary = useMemo(() => {
     const totalTarget = dreams.reduce((sum, dream) => sum + dream.target, 0)
     const totalCompleted = dreams.reduce((sum, dream) => sum + dream.completed, 0)
@@ -44,6 +109,10 @@ export default function Dashboard() {
     emergencyFund.target === 0
       ? 0
       : Math.round((emergencyFund.current / emergencyFund.target) * 100)
+
+  const handleAddRecord = (record: RecordEntry) => {
+    setRecordEntries((prev) => [record, ...prev])
+  }
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('zh-TW', {
@@ -193,7 +262,7 @@ export default function Dashboard() {
       value: '12筆',
       status: 'good' as const,
       statusLabel: '活躍',
-      note: '語音 7 / 上傳 5',
+      note: '語音 7 / 手動 5',
     },
     {
       id: 'record-2',
@@ -202,7 +271,7 @@ export default function Dashboard() {
       value: '9筆',
       status: 'warning' as const,
       statusLabel: '追蹤中',
-      note: '語音 5 / 上傳 4',
+      note: '語音 5 / 手動 4',
     },
     {
       id: 'record-3',
@@ -211,7 +280,7 @@ export default function Dashboard() {
       value: '6筆',
       status: 'warning' as const,
       statusLabel: '追蹤中',
-      note: '語音 4 / 上傳 2',
+      note: '語音 4 / 手動 2',
     },
   ]
 
@@ -268,31 +337,20 @@ export default function Dashboard() {
 
             <TabsContent value="overview" className="mt-0 p-4 sm:p-6">
               <div className="space-y-6">
+                <RecordKeepingPanel onAddRecord={handleAddRecord} />
                 <FinancialIndicatorsPanel />
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   <DreamGoalsPanel dreams={dreams} onDreamsChange={setDreams} />
                   <EmergencyFundPanel data={emergencyFund} onChange={setEmergencyFund} />
                 </div>
-                <RecordKeepingPanel />
-                <div className="space-y-4">
-                  <h3 className="text-lg font-semibold text-foreground">歷史紀錄</h3>
-                  <div className="grid gap-4 lg:grid-cols-2">
-                    <IndicatorHistoryPanel title="財務健康歷史紀錄" records={healthHistory} />
-                    <IndicatorHistoryPanel title="財務安全歷史紀錄" records={safetyHistory} />
-                    <IndicatorHistoryPanel title="夢想完成狀況歷史紀錄" records={dreamHistory} />
-                    <IndicatorHistoryPanel
-                      title="緊急預備金狀況歷史紀錄"
-                      records={emergencyHistory}
-                    />
-                    <IndicatorHistoryPanel title="記帳專區歷史紀錄" records={recordHistory} />
-                  </div>
-                </div>
+                <OverviewActionSections />
               </div>
             </TabsContent>
 
             <TabsContent value="recording" className="mt-0 p-4 sm:p-6">
               <div className="space-y-6">
-                <RecordKeepingPanel />
+                <RecordKeepingPanel onAddRecord={handleAddRecord} />
+                <RecordKeepingTracker records={recordEntries} />
                 <IndicatorHistoryPanel title="歷史紀錄" description="記帳專區" records={recordHistory} />
               </div>
             </TabsContent>
