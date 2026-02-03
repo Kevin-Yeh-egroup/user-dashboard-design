@@ -290,7 +290,7 @@ export default function Dashboard() {
         <div className="mb-6 sm:mb-8 space-y-1 sm:space-y-2">
           <h1 className="text-2xl sm:text-3xl font-bold text-foreground">我的儀表板</h1>
           <p className="text-sm sm:text-base text-muted-foreground">
-            追蹤您的夢想目標和緊急預備金進度
+            追蹤你的夢想進度 掌握你的財務
           </p>
         </div>
 
