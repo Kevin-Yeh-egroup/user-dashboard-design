@@ -1,11 +1,17 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import DreamGoalsPanel, { type Dream } from '@/components/dream-goals-panel'
 import EmergencyFundPanel from '@/components/emergency-fund-panel'
 import FinancialIndicatorsPanel from '@/components/financial-indicators-panel'
 import IndicatorHistoryPanel from '@/components/indicator-history-panel'
 import OverviewActionSections from '@/components/overview-action-sections'
+import {
+  OverviewCustomizer,
+  loadSelection,
+  DEFAULT_SELECTION,
+  type OverviewSelection,
+} from '@/components/overview-customizer'
 import RecordKeepingPanel from '@/components/record-keeping-panel'
 import RecordKeepingTracker from '@/components/record-keeping-tracker'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -25,6 +31,13 @@ const addDays = (date: Date, offset: number) => {
 }
 
 export default function Dashboard() {
+  const [overviewSelection, setOverviewSelection] =
+    useState<OverviewSelection>(DEFAULT_SELECTION)
+
+  useEffect(() => {
+    setOverviewSelection(loadSelection())
+  }, [])
+
   const [dreams, setDreams] = useState<Dream[]>([
     {
       id: '1',
@@ -336,14 +349,36 @@ export default function Dashboard() {
             </TabsList>
 
             <TabsContent value="overview" className="mt-0 p-4 sm:p-6">
-              <div className="space-y-6">
-                <RecordKeepingPanel onAddRecord={handleAddRecord} />
-                <FinancialIndicatorsPanel />
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  <DreamGoalsPanel dreams={dreams} onDreamsChange={setDreams} />
-                  <EmergencyFundPanel data={emergencyFund} onChange={setEmergencyFund} />
+              <div className="flex flex-col gap-6">
+                <div className="flex justify-end">
+                  <OverviewCustomizer
+                    selection={overviewSelection}
+                    onSelectionChange={setOverviewSelection}
+                  />
                 </div>
-                <OverviewActionSections />
+                <div className="space-y-6">
+                  {overviewSelection.recordKeeping && (
+                    <RecordKeepingPanel onAddRecord={handleAddRecord} />
+                  )}
+                  {overviewSelection.financialIndicators && <FinancialIndicatorsPanel />}
+                  {(overviewSelection.dreamGoals || overviewSelection.emergencyFund) && (
+                    <div
+                      className={
+                        overviewSelection.dreamGoals && overviewSelection.emergencyFund
+                          ? 'grid grid-cols-1 lg:grid-cols-2 gap-6'
+                          : 'space-y-6'
+                      }
+                    >
+                      {overviewSelection.dreamGoals && (
+                        <DreamGoalsPanel dreams={dreams} onDreamsChange={setDreams} />
+                      )}
+                      {overviewSelection.emergencyFund && (
+                        <EmergencyFundPanel data={emergencyFund} onChange={setEmergencyFund} />
+                      )}
+                    </div>
+                  )}
+                  {overviewSelection.consultShare && <OverviewActionSections />}
+                </div>
               </div>
             </TabsContent>
 
